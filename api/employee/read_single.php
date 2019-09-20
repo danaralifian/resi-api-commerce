@@ -1,6 +1,6 @@
 <?php
     // Header
-    header('Access-Control-Alllow-Origin: *');
+    header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/JSON');
 
     include_once '../../config/Database.php';
