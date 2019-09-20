@@ -62,10 +62,10 @@
             $this->jobTitle = $row['jobTitle'];
         }
 
-        // Create POST
+        // CREATE Employee
         public function create()
         {
-            // Create 
+            // Create Query
             $query = 'INSERT INTO '.$this->table.'
                 SET
                     employeeNumber = :employeeNumber,
@@ -108,6 +108,58 @@
             printf("Error: %s.\n", $stmt->error);
 
             return false;          
-
         }
+
+        // UPDATE Employee
+        public function update()
+        {
+            // Create Query
+            $query = 'UPDATE '.$this->table.'
+                SET
+                    employeeNumber = :employeeNumber,
+                    lastName = :lastName,
+                    firstName = :firstName,
+                    extension = :extension,
+                    email = :email,
+                    officeCode = :officeCode,
+                    reportsTo = :reportsTo,
+                    jobTitle = :jobTitle
+                WHERE
+                    employeeNumber = :id';
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            // Clean Data
+            $this->employeeNumber = htmlspecialchars(strip_tags($this->employeeNumber));
+            $this->lastNmae = htmlspecialchars(strip_tags($this->lastName));
+            $this->firstName = htmlspecialchars(strip_tags($this->firstName));
+            $this->extension = htmlspecialchars(strip_tags($this->extension));
+            $this->email = htmlspecialchars(strip_tags($this->email));
+            $this->officeCode = htmlspecialchars(strip_tags($this->officeCode));
+            $this->reportsTo = htmlspecialchars(strip_tags($this->reportsTo));
+            $this->jobTitle = htmlspecialchars(strip_tags($this->jobTitle));
+            $this->id = htmlspecialchars(strip_tags($this->id));
+
+            //Bind Data
+            $stmt->bindParam(':employeeNumber', $this->employeeNumber);
+            $stmt->bindParam(':lastName', $this->lastName);
+            $stmt->bindParam(':firstName', $this->firstName);        
+            $stmt->bindParam(':extension', $this->extension);
+            $stmt->bindParam(':email', $this->email);
+            $stmt->bindParam(':officeCode', $this->officeCode);
+            $stmt->bindParam(':reportsTo', $this->reportsTo);
+            $stmt->bindParam(':jobTitle', $this->jobTitle);
+            $stmt->bindParam(':id', $this->id);
+
+            if ($stmt->execute()) {
+                return true;
+            }
+
+            //Print error if something goes wrong
+            printf("Error: %s.\n", $stmt->error);
+
+            return false;
+        }
+
     }

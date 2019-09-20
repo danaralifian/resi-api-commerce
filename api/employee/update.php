@@ -2,7 +2,7 @@
     // Header
     header('Access-Control-Allow-Origin: *');
     header('Content-Type: application/JSON');
-    header('Access-Control-Allow-Methods: POST');
+    header('Access-Control-Allow-Methods: PUT');
     header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type,
             Access-Control-Allow-Methods, Authorization, X-Requested-With');
 
@@ -19,6 +19,9 @@
     // GET raw employee data
     $data = json_decode(file_get_contents("php://input"));
 
+    // SET ID to Update (employeeNumber=>ID)
+    $employees->id = $data->id;
+
     $employees->employeeNumber = $data->employeeNumber;
     $employees->lastName = $data->lastName;
     $employees->firstName = $data->firstName;
@@ -28,12 +31,12 @@
     $employees->reportsTo = $data->reportsTo;
     $employees->jobTitle = $data->jobTitle;
 
-    if ($employees->create()) {
+    if ($employees->update()) {
         echo json_encode(
-            array('message' => 'Post Created')
+            array('message' => 'Post Updated')
         );
     } else {
         echo json_encode(
-            array('message' => 'Post Not Created')
+            array('message' => 'Post Not Updated')
         );
     }
