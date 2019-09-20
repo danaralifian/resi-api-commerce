@@ -162,4 +162,29 @@
             return false;
         }
 
+        // DELETE Employee
+        public function delete()
+        {
+            // Create Query
+            $query = 'DELETE FROM '.$this->table.' WHERE employeeNumber = :id';
+
+            // Prepare Statement
+            $stmt = $this->conn->prepare($query);
+
+            //Clean data
+            $this->id = htmlspecialchars(strip_tags($this->id));
+
+            // Bind Data
+            $stmt->bindParam(':id', $this->id);
+
+            if ($stmt->execute()) {
+                return true;
+            }
+
+            //Print error if something goes wrong
+            printf("Error: %s.\n", $stmt->error);
+
+            return false;
+        }
+
     }
